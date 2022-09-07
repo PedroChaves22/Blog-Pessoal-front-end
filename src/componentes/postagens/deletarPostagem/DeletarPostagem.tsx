@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
-import './DeletarTema.css';
+import { Typography, Button, Card, CardActions, CardContent } from "@material-ui/core"
+import './DeletarPostagem.css';
+import Postagem from '../../../models/Postagem';
+import { Box } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'react-use-localstorage';
 import { buscaId, deleteId } from '../../../services/Services';
-import Tema from '../../../models/Tema';
-import { Box } from '@mui/material';
 
-
-
-function DeletarTema() {
+function DeletarPostagem() {
 
   let navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [token, setToken] = useLocalStorage('token');
-  const [tema, setTema] = useState<Tema>()
+  const [postagem, setPostagem] = useState<Postagem>()
 
   useEffect(() => {
     if (token == "") {
@@ -31,7 +29,7 @@ function DeletarTema() {
   }, [id])
 
   async function findById(id: string) {
-    buscaId(`/temas/${id}`, setTema, {
+    buscaId(`/postagens/${id}`, setPostagem, {
       headers: {
         'Authorization': token
       }
@@ -39,32 +37,33 @@ function DeletarTema() {
   }
 
   function sim() {
-    navigate('/temas')
-    deleteId(`/temas/${id}`, {
+    navigate('/posts')
+    deleteId(`/postagens/${id}`, {
       headers: {
         'Authorization': token
       }
     });
-    alert('Tema deletado com sucesso');
+    alert('Postagem deletado com sucesso');
   }
 
   function nao() {
-    navigate('/temas')
+    navigate('/posts')
   }
 
   return (
     <>
       <Box m={2}>
-        <Card variant="outlined">
+        <Card variant="outlined" >
           <CardContent>
             <Box justifyContent="center">
               <Typography color="textSecondary" gutterBottom>
-                Deseja deletar o Tema:
+                Deseja deletar a Postagem:
               </Typography>
-              <Typography color="textSecondary">
-                {tema?.descricao}
+              <Typography color="textSecondary" >
+                {postagem?.titulo}
               </Typography>
             </Box>
+
           </CardContent>
           <CardActions>
             <Box display="flex" justifyContent="start" ml={1.0} mb={2} >
@@ -73,7 +72,7 @@ function DeletarTema() {
                   Sim
                 </Button>
               </Box>
-              <Box mx={2}>
+              <Box>
                 <Button onClick={nao} variant="contained" size='large' color="secondary">
                   Não
                 </Button>
@@ -85,4 +84,4 @@ function DeletarTema() {
     </>
   );
 }
-export default DeletarTema;
+export default DeletarPostagem;
